@@ -11,11 +11,6 @@ require 'open3'
 
 Puppet.initialize_settings
 
-unless Puppet[:server] == Puppet[:certname]
-  puts 'This task can only be run on the Master (of Masters)'
-  exit 1
-end
-
 def purge_node(agent)
   stdout, stderr, status = Open3.capture3('/opt/puppetlabs/puppet/bin/puppet', 'node', 'purge', agent)
   {
