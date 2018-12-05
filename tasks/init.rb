@@ -11,6 +11,14 @@ require 'open3'
 
 Puppet.initialize_settings
 
+# This task only works when running against your Puppet CA server, so let's check for that.
+# In Puppetserver, that means that the bootstrap.cfg file contains 'certificate-authority-service'.
+bootstrap_cfg = '/etc/puppetlabs/puppetserver/bootstrap.cfg'
+if !File.exist?(bootstrap_cfg) || File.readlines(bootstrap_cfg).grep(%r{^[^#].+certificate-authority-service$}).empty?
+  puts 'This task can only be run on your certificate authority Puppet master (MoM)'
+  exit 1
+end
+
 def purge_node(agent)
   stdout, stderr, status = Open3.capture3('/opt/puppetlabs/puppet/bin/puppet', 'node', 'purge', agent)
   {
