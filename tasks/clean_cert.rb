@@ -20,7 +20,7 @@ if !File.exist?(bootstrap_cfg) || File.readlines(bootstrap_cfg).grep(%r{^[^#].+c
 end
 
 def clean_cert(agent)
-  stdout, stderr, status = Open3.capture3('/opt/puppetlabs/puppet/bin/puppet', 'cert', 'clean', agent)
+  stdout, stderr, status = Open3.capture3('/opt/puppetlabs/bin/puppetserver', 'ca', 'clean', agent)
   {
     stdout: stdout.strip,
     stderr: stderr.strip,
